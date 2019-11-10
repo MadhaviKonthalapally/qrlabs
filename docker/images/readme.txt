@@ -116,3 +116,30 @@ Advanced image concepts
        docker image inspect nginx:1.14.0
        docker image inspect nginx:1.14.0 --format "{{.Architecture}}"
        docker image inspect nginx:1.14.0 --format "{{.Architecture}} {{.Os}}"
+
+
+Efficient Docker Images:
+========================
+
+when working with docker in the real world, it is important to create docker images that are as efficient as possible.
+this means that they are as small as possible and result in ephemeral containers that can be started, stopped and destroyed easily. 
+some tips: 
+	put things that are less likely to change on lower-level layers.
+	don't create unnecessary layers.
+	avoid including any unnecessary files, pakcages etc. in the image. 
+
+
+Multi-Stage Builds:
+===================
+Docker supports the ability to perform multi-stage builds. Multi-Stage builds have more than one FROM directive in the Dockerfile, with each FROM directive starting a new stage.
+
+Each stage begins a completely new set of file system layers, allowing you to selectively copy only the files you need from previous layers.
+
+use the --from flag with COPY to coy files from a pervious stage.
+COPY --from=0 ...
+you can also name your stages with FROM... AS then reference the name with COPY --from
+
+FROM <image> AS Stage1
+
+FROM <image> AS stage2
+COPY --from-stage1 ..
